@@ -92,12 +92,8 @@ userRouter.post("/login", async (req, res) => {
 userRouter.post("/groups/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    const { groupId, groupName, description, paid, groupLink, content } =
+    const { groupId, groupName, description, paid, groupLink } =
       req.body;
-
-    const newTemplate = {
-      content,
-    };
 
     const newGroup = {
       groupId,
@@ -105,7 +101,7 @@ userRouter.post("/groups/:userId", async (req, res) => {
       description,
       paid,
       groupLink,
-      template: [content],
+      template: [],
     };
 
     const user = await userModel.findById(userId);
