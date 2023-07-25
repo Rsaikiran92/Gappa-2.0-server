@@ -10,7 +10,7 @@ const answerSchema = new mongoose.Schema({
 });
 
 const groupSchema = new mongoose.Schema({
-  groupId: { type: String, required: true },
+  groupId: { type: String },
   groupName: { type: String, required: true },
   description: { type: String, required: true },
   paid: { type: Boolean, required: true },
