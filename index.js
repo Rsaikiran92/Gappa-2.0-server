@@ -1,6 +1,7 @@
 const express = require("express");
 const { connection } = require("./Configs/db");
 const { userRouter } = require("./routes/user.routes");
+const { tokenRouter } = require("./routes/token.routes");
 require("dotenv").config();
 const cors = require("cors");
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRouter);
+app.use("/token", tokenRouter);
 
 app.listen(process.env.port, async () => {
   try {
