@@ -170,7 +170,7 @@ userRouter.post("/groups/:userId", async (req, res) => {
 
     user.group.push(newGroup);
     const savedUser = await user.save();
-    res.status(201).json(savedUser);
+    res.status(201).json(newGroup);
   } catch (error) {
     res
       .status(500)
