@@ -168,7 +168,7 @@ userRouter.post("/groups/:userId", async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.community.push(newGroup);
+    user.group.push(newGroup);
     const savedUser = await user.save();
     res.status(201).json(savedUser);
   } catch (error) {
