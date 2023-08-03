@@ -190,7 +190,7 @@ userRouter.patch("/:userId/groups/:groupId", (req, res) => {
     }
 
     // Find the group with the specified groupId from the user's group array
-    const group = user.group.find((g) => g._id.toString() === groupId);
+    const group = user.group.find((g) => g.groupId.toString() === groupId);
 
     if (!group) {
       return res.status(404).json({ error: "Group not found" });
