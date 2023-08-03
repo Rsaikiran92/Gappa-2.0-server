@@ -122,28 +122,23 @@ userRouter.delete("/:userId", async (req, res) => {
 
 // GET REQUEST
 // user router for handling the GET request to fetch group data
-userRouter.get("/:userId/groups/:groupId", (req, res) => {
+userRouter.get("/:userId/groups/:groupId", async (req, res) => {
   const { userId, groupId } = req.params;
 
-  userModel.findById(userId, (err, user) => {
-    if (err) {
-      console.error("Error finding user:", err);
-      return res.status(500).json({ error: "Server error" });
-    }
+  const user = await userModel.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+  if (!user) {
+    return res.status(404).json({ error: "User not found." });
+  }
 
-    // Find the group with the specified groupId from the user's group array
-    const group = user.group.find((g) => g.groupId.toString() === groupId);
+  // Find the group with the specified groupId from the user's group array
+  const group = user.group.find((g) => g._id.toString() === groupId);
 
-    if (!group) {
-      return res.status(404).json({ error: "Group not found" });
-    }
+  if (!group) {
+    return res.status(404).json({ error: "Group not found" });
+  }
 
-    return res.status(200).json(group);
-  });
+  return res.status(200).json(group);
 });
 
 // POST REQUEST
