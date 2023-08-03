@@ -128,7 +128,7 @@ userRouter.get("/:userId/groups/:groupId", (req, res) => {
   userModel.findById(userId, (err, user) => {
     if (err) {
       console.error("Error finding user:", err);
-      return res.status(500).json({ error: "Server error",userId });
+      return res.status(500).json({ error: "Server error" });
     }
 
     if (!user) {
