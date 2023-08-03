@@ -227,7 +227,7 @@ userRouter.delete("/:userId/groups/:groupId", async (req, res) => {
     }
 
     // Remove the group with the given group ID
-    user.group = user.group.filter((groups) => groups.groupId !== groupId);
+    user.group = user.group.filter((groups) => groups._id !== groupId);
     await user.save();
 
     res.status(200).json(user);
