@@ -20,10 +20,10 @@ tokenRouter.get("/", async (req, res) => {
 // token route to add a group
 tokenRouter.post("/", async (req, res) => {
   try {
-    const { username, number, token } = req.body;
+    const { numberid, number, token } = req.body;
 
     // Create a new token document using the tokenModel
-    const newToken = new tokenModel({ username, number, token });
+    const newToken = new tokenModel({ numberid, number, token });
 
     // Save the new token document to the database
     const savedToken = await newToken.save();
@@ -39,12 +39,12 @@ tokenRouter.post("/", async (req, res) => {
 tokenRouter.put("/:tokenId", async (req, res) => {
   try {
     const { tokenId } = req.params;
-    const { username, number, token } = req.body;
+    const { numbrid, number, token } = req.body;
 
     // Find the document by ID and update its fields
     const updatedToken = await tokenModel.findByIdAndUpdate(
       tokenId,
-      { username, number, token },
+      { numberid, number, token },
       { new: true } // This option returns the updated document
     );
 
