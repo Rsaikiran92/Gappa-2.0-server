@@ -4,7 +4,8 @@ const tokenSchema = mongoose.Schema({
   numberid: { type: String, required: true },
   number: { type: Number, required: true },
   token: { type: String, required: true },
-  whatsappnum:{type: Number}
+  numberofgroups:{type: Number},
+  status:{ type:boolean }
 });
 
 const tokenModel = mongoose.model("token", tokenSchema);
