@@ -5,7 +5,7 @@ const tokenSchema = mongoose.Schema({
   number: { type: Number, required: true },
   token: { type: String, required: true },
   numberofgroups:{type: Number},
-  status:{ type:boolean }
+  status:{ type:Boolean }
 });
 
 const tokenModel = mongoose.model("token", tokenSchema);
