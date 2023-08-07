@@ -52,7 +52,7 @@ userRouter.post("/login", async (req, res) => {
     if (user.length > 0) {
       bcrypt.compare(password, hashed_password, (err, result) => {
         if (result) {
-          const token = jwt.sign({ userID: user[0]._id }, "masai");
+          const token = jwt.sign({ userID: user[0]._id }, "gappa");
           res.send({
             msg: "Login Successful",
             token: token,
