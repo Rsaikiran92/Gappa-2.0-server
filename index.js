@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRouter);
 app.use("/token", tokenRouter);
 
-app.listen(process.env.port, async () => {
+app.listen(8080, async () => {
   try {
     await connection;
     console.log("Connected to the DB");
@@ -29,5 +29,5 @@ app.listen(process.env.port, async () => {
     console.log("Trouble connecting to the DB");
     console.log(err);
   }
-  console.log(`Running at ${process.env.port} Port`);
+  console.log(`Running at 8080 Port`);
 });
