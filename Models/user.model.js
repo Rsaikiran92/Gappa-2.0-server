@@ -27,7 +27,7 @@ const communitySchema = new mongoose.Schema({
   paid: { type: Boolean, required: true },
   groupLink: { type: String, required: true },
   numberAdd:{type:Boolean},
-  groupId:{type:string},
+  groupId:{type:String},
   questionSet: [],
   answerSet: [answerSchema],
 });
