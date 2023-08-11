@@ -280,6 +280,8 @@ userRouter.post("/community/:userId", async (req, res) => {
       groupRules,
       paid,
       groupLink,
+      numberAdd,
+      groupId,
       questionSet,
     } = req.body;
 
@@ -291,6 +293,8 @@ userRouter.post("/community/:userId", async (req, res) => {
       groupRules,
       paid,
       groupLink,
+       numberAdd,
+      groupId,
       questionSet,
       answerSet: [],
     };
