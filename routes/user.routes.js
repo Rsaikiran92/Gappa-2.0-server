@@ -327,6 +327,8 @@ userRouter.patch("/:userId/:communityId", (req, res) => {
     groupRules,
     paid,
     groupLink,
+    numberAdd,
+      groupId,
   } = req.body;
 
   userModel.findById(userId, (err, user) => {
@@ -355,6 +357,8 @@ userRouter.patch("/:userId/:communityId", (req, res) => {
       (community.groupRules = groupRules),
       (community.paid = paid),
       (community.groupLink = groupLink),
+      (community.numberAdd=numberAdd),
+      (community.groupId=groupId)
       // Save the updated user object
       user.save((saveErr) => {
         if (saveErr) {
