@@ -307,7 +307,7 @@ userRouter.post("/community/:userId", async (req, res) => {
 
     user.community.push(newCommunity);
     const savedUser = await user.save();
-    res.status(201).json(newCommunity);
+    res.status(201).json(savedUser);
   } catch (error) {
     res
       .status(500)
