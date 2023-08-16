@@ -30,6 +30,7 @@ const communitySchema = new mongoose.Schema({
   groupId:{type:String},
   questionSet: [],
   answerSet: [answerSchema],
+  events:[]
 });
 
 const userSchema = mongoose.Schema({
