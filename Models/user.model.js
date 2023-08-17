@@ -9,6 +9,19 @@ const answerSchema = new mongoose.Schema({
   answer: [],
 });
 
+const eventSchema=new mongoose.Schema({
+  eventTitle:{type:String,required:true},
+  eventDate:{type:String,required:true},
+  eventTime:{type:String,required:true},
+  eventDuration:{type:String,required:true},
+  eventLocation:{type:String,required:true},
+  eventLocationDeatil:{type:String,required:true},
+  eventDetails:{type:String,required:true},
+  eventCoverImage:{type:String,required:true},
+  eventPaid:{type:Boolean,required:true},
+  eventamount:{type:Number,required:true},
+})
+
 const groupSchema = new mongoose.Schema({
   groupId: { type: String },
   groupName: { type: String, required: true },
@@ -30,7 +43,7 @@ const communitySchema = new mongoose.Schema({
   groupId:{type:String},
   questionSet: [],
   answerSet: [answerSchema],
-  events:[]
+  events:[eventSchema]
 });
 
 const userSchema = mongoose.Schema({

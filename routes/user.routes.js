@@ -237,6 +237,96 @@ userRouter.delete("/:userId/groups/:groupId", async (req, res) => {
   }
 });
 
+//event
+
+userRouter.get("/:userId/:communityId/:eventId",(req,res)=>{
+  const { userId , communityId , eventId} = req.params;
+  userModel.findById(userId, (err, user) => {
+    if (err) {
+      console.error("Error finding user:", err);
+      return res.status(500).json({ error: "Server error" });
+    }
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const community = user.community.find(
+      (c) => c._id.toString() === communityId
+    );
+    if (!community) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    const event=user.community.event.find(
+      (c)=>c._id.toString() === eventId
+    )
+    if (!event) {
+      return res
+        .status(404)
+        .json({ error: "event not found for the user" });
+    }
+    return res.status(200).json(event);
+  });
+})
+
+
+//post event
+userRouter.post("/:userId/:communityId", async (req, res) => {
+  try {
+    console.log("work")
+    const {userId,communityId} = req.params;
+    const {
+      eventTitle,
+      eventDate,
+      eventTime,
+      eventDuration,
+      eventLocation,
+      eventLocationDeatil,
+      eventDetails,
+      eventCoverImage,
+      eventPaid,
+      eventamount,
+    } = req.body;
+
+    const newCommunity = {
+      eventTitle,
+      eventDate,
+      eventTime,
+      eventDuration,
+      eventLocation,
+      eventLocationDeatil,
+      eventDetails,
+      eventCoverImage,
+      eventPaid,
+      eventamount,
+    };
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const community = user.community.find(
+      (c) => c._id.toString() === communityId
+    );
+    if (!community) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    console.log("user",community)
+    community.events.push(newCommunity);
+    const savedUser = await user.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error adding event", error: error.message });
+  }
+});
+
 /* { COMMUNITY } */
 
 // GET REQUEST
