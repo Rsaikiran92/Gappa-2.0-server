@@ -283,11 +283,11 @@ userRouter.post("/:userId/:communityId", async (req, res) => {
       eventTime,
       eventDuration,
       eventLocation,
-      eventLocationDeatil,
+      eventLocationDetails,
       eventDetails,
       eventCoverImage,
       eventPaid,
-      eventamount,
+      eventAmount,
     } = req.body;
 
     const newCommunity = {
@@ -375,11 +375,11 @@ userRouter.patch("/:userId/community/:communityId/:eventId", async(req, res) => 
   eventTime,
   eventDuration,
   eventLocation,
-  eventLocationDeatil,
+  eventLocationDetails,
   eventDetails,
   eventCoverImage,
   eventPaid,
-  eventamount,
+  eventAmount,
   } = req.body;
 
   const user = await userModel.findById(userId);
@@ -413,11 +413,11 @@ userRouter.patch("/:userId/community/:communityId/:eventId", async(req, res) => 
       (event.eventTime = eventTime),
       (event.eventDuration = eventDuration),
       (event.eventLocation = eventLocation),
-      (event.eventLocationDeatil = eventLocationDeatil),
+      (event.eventLocationDetails = eventLocationDetails),
       (event.eventDetails = eventDetails),
       (event.eventCoverImage=eventCoverImage),
       (event.eventPaid=eventPaid)
-      event.eventamount=eventamount
+      event.eventAmount=eventAmount
       // Save the updated user object
       user.save((saveErr) => {
         if (saveErr) {
