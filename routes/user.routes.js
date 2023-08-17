@@ -296,11 +296,11 @@ userRouter.post("/:userId/:communityId", async (req, res) => {
       eventTime,
       eventDuration,
       eventLocation,
-      eventLocationDeatil,
+      eventLocationDetails,
       eventDetails,
       eventCoverImage,
       eventPaid,
-      eventamount,
+      eventAmount,
     };
 
     const user = await userModel.findById(userId);
