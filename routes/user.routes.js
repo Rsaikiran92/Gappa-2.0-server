@@ -327,6 +327,43 @@ userRouter.post("/:userId/:communityId", async (req, res) => {
   }
 });
 
+// DELETE REQUEST
+userRouter.delete("/:userId/community/:communityId/:eventId", async(req, res) => {
+  const { userId, communityId ,eventId} = req.params;
+  const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const community = user.community.find(
+      (c) => c._id.toString() === communityId
+    );
+    if (!community) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    const event = user.community.events.find(
+      (c) => c._id.toString() === eventId
+    );
+    if (!event) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    user.community.events.splice(event, 1);
+    user.save((saveErr) => {
+      if (saveErr) {
+        console.error("Error saving user:", saveErr);
+        return res.status(500).json({ error: "Server error" });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "Community group deleted successfully" });
+    });
+});
+
 /* { COMMUNITY } */
 
 // GET REQUEST
