@@ -237,201 +237,6 @@ userRouter.delete("/:userId/groups/:groupId", async (req, res) => {
   }
 });
 
-//event
-
-userRouter.get("/:userId/:communityId/:eventId",(req,res)=>{
-  const { userId , communityId , eventId} = req.params;
-  userModel.findById(userId, (err, user) => {
-    if (err) {
-      console.error("Error finding user:", err);
-      return res.status(500).json({ error: "Server error" });
-    }
-
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const community = user.community.find(
-      (c) => c._id.toString() === communityId
-    );
-    if (!community) {
-      return res
-        .status(404)
-        .json({ error: "Community not found for the user" });
-    }
-    const event=user.community.event.find(
-      (c)=>c._id.toString() === eventId
-    )
-    if (!event) {
-      return res
-        .status(404)
-        .json({ error: "event not found for the user" });
-    }
-    return res.status(200).json(event);
-  });
-})
-
-
-//post event
-userRouter.post("/:userId/:communityId", async (req, res) => {
-  try {
-    console.log("work")
-    const {userId,communityId} = req.params;
-    const {
-      eventTitle,
-      eventDate,
-      eventTime,
-      eventDuration,
-      eventLocation,
-      eventLocationDetails,
-      eventDetails,
-      eventCoverImage,
-      eventPaid,
-      eventAmount,
-    } = req.body;
-
-    const newCommunity = {
-      eventTitle,
-      eventDate,
-      eventTime,
-      eventDuration,
-      eventLocation,
-      eventLocationDetails,
-      eventDetails,
-      eventCoverImage,
-      eventPaid,
-      eventAmount,
-    };
-
-    const user = await userModel.findById(userId);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const community = user.community.find(
-      (c) => c._id.toString() === communityId
-    );
-    if (!community) {
-      return res
-        .status(404)
-        .json({ error: "Community not found for the user" });
-    }
-    console.log("user",community)
-    community.events.push(newCommunity);
-    const savedUser = await user.save();
-    res.status(201).json(savedUser);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error adding event", error: error.message });
-  }
-});
-
-// DELETE REQUEST
-userRouter.delete("/:userId/community/:communityId/:eventId", async(req, res) => {
-  const { userId, communityId ,eventId} = req.params;
-  const user = await userModel.findById(userId);
-  
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    const community = user.community.find(
-      (c) => c._id.toString() === communityId
-    );
-    
-    if (!community) {
-      return res
-        .status(404)
-        .json({ error: "Community not found for the user" });
-    }
-    const event = community.events.findIndex(
-      (c) => c._id.toString() === eventId
-    );
-    console.log(event)
-    if (!event) {
-      return res
-        .status(404)
-        .json({ error: "Community not found for the user" });
-    }
-    community.events.splice(event, 1);
-    user.save((saveErr) => {
-      if (saveErr) {
-        console.error("Error saving user:", saveErr);
-        return res.status(500).json({ error: "Server error" });
-      }
-
-      return res
-        .status(200)
-        .json({ message: "Event deleted successfully" });
-    });
-});
-
-// PATCH REQUEST
-userRouter.patch("/:userId/community/:communityId/:eventId", async(req, res) => {
-  const { userId, communityId , eventId} = req.params;
-  const {
-    eventTitle,
-  eventDate,
-  eventTime,
-  eventDuration,
-  eventLocation,
-  eventLocationDetails,
-  eventDetails,
-  eventCoverImage,
-  eventPaid,
-  eventAmount,
-  } = req.body;
-
-  const user = await userModel.findById(userId);
-  
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  const community = user.community.find(
-    (c) => c._id.toString() === communityId
-  );
-  
-  if (!community) {
-    return res
-      .status(404)
-      .json({ error: "Community not found for the user" });
-  }
-  //console.log("user",userId)
-  //console.log("community",communityId)
-  //console.log("event",eventId)
-  const event = community.events.find(
-    (c) => c._id.toString() === eventId
-  );
-  if (!event) {
-    return res
-      .status(404)
-      .json({ error: "event not found for the user" });
-  }
-    
-    event.eventTitle = eventTitle,
-      (event.eventDate = eventDate),
-      (event.eventTime = eventTime),
-      (event.eventDuration = eventDuration),
-      (event.eventLocation = eventLocation),
-      (event.eventLocationDetails = eventLocationDetails),
-      (event.eventDetails = eventDetails),
-      (event.eventCoverImage=eventCoverImage),
-      (event.eventPaid=eventPaid)
-      event.eventAmount=eventAmount
-      // Save the updated user object
-      user.save((saveErr) => {
-        if (saveErr) {
-          console.error("Error saving user:", saveErr);
-          return res.status(500).json({ error: "Server error" });
-        }
-
-        return res.status(200).json({
-          message: "Event details updated successfully",
-          community: event,
-        });
-      });
-  });
-
 
 /* { COMMUNITY } */
 
@@ -613,6 +418,169 @@ userRouter.delete("/:userId/community/:communityId", (req, res) => {
     });
   });
 });
+
+
+//event
+
+//post event
+userRouter.post("/:userId/event/:communityId", async (req, res) => {
+  try {
+    console.log("work")
+    const {userId,communityId} = req.params;
+    const {
+      eventTitle,
+      eventDate,
+      eventTime,
+      eventDuration,
+      eventLocation,
+      eventLocationDetails,
+      eventDetails,
+      eventCoverImage,
+      eventPaid,
+      eventAmount,
+    } = req.body;
+
+    const newCommunity = {
+      eventTitle,
+      eventDate,
+      eventTime,
+      eventDuration,
+      eventLocation,
+      eventLocationDetails,
+      eventDetails,
+      eventCoverImage,
+      eventPaid,
+      eventAmount,
+    };
+
+    const user = await userModel.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const community = user.community.find(
+      (c) => c._id.toString() === communityId
+    );
+    if (!community) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    console.log("user",community)
+    community.events.push(newCommunity);
+    const savedUser = await user.save();
+    res.status(201).json(savedUser);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error adding event", error: error.message });
+  }
+});
+
+// DELETE REQUEST
+userRouter.delete("/:userId/:communityId/event/:eventId", async(req, res) => {
+  const { userId, communityId ,eventId} = req.params;
+  const user = await userModel.findById(userId);
+  
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const community = user.community.find(
+      (c) => c._id.toString() === communityId
+    );
+    
+    if (!community) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    const event = community.events.findIndex(
+      (c) => c._id.toString() === eventId
+    );
+    console.log(event)
+    if (!event) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    community.events.splice(event, 1);
+    user.save((saveErr) => {
+      if (saveErr) {
+        console.error("Error saving user:", saveErr);
+        return res.status(500).json({ error: "Server error" });
+      }
+
+      return res
+        .status(200)
+        .json({ message: "Event deleted successfully" });
+    });
+});
+
+// PATCH REQUEST
+userRouter.patch("/:userId/:communityId/event/:eventId", async(req, res) => {
+  const { userId, communityId , eventId} = req.params;
+  const {
+    eventTitle,
+  eventDate,
+  eventTime,
+  eventDuration,
+  eventLocation,
+  eventLocationDetails,
+  eventDetails,
+  eventCoverImage,
+  eventPaid,
+  eventAmount,
+  } = req.body;
+
+  const user = await userModel.findById(userId);
+  
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const community = user.community.find(
+    (c) => c._id.toString() === communityId
+  );
+  
+  if (!community) {
+    return res
+      .status(404)
+      .json({ error: "Community not found for the user" });
+  }
+  //console.log("user",userId)
+  //console.log("community",communityId)
+  //console.log("event",eventId)
+  const event = community.events.find(
+    (c) => c._id.toString() === eventId
+  );
+  if (!event) {
+    return res
+      .status(404)
+      .json({ error: "event not found for the user" });
+  }
+    
+    event.eventTitle = eventTitle,
+      (event.eventDate = eventDate),
+      (event.eventTime = eventTime),
+      (event.eventDuration = eventDuration),
+      (event.eventLocation = eventLocation),
+      (event.eventLocationDetails = eventLocationDetails),
+      (event.eventDetails = eventDetails),
+      (event.eventCoverImage=eventCoverImage),
+      (event.eventPaid=eventPaid)
+      event.eventAmount=eventAmount
+      // Save the updated user object
+      user.save((saveErr) => {
+        if (saveErr) {
+          console.error("Error saving user:", saveErr);
+          return res.status(500).json({ error: "Server error" });
+        }
+
+        return res.status(200).json({
+          message: "Event details updated successfully",
+          community: event,
+        });
+      });
+  });
 
 /* { QUESTION & ANSWER } */
 
