@@ -366,6 +366,73 @@ userRouter.delete("/:userId/community/:communityId/:eventId", async(req, res) =>
     });
 });
 
+// PATCH REQUEST
+userRouter.patch("/:userId/community/:communityId/:eventId", async(req, res) => {
+  const { userId, communityId , eventId} = req.params;
+  const {
+    eventTitle,
+  eventDate,
+  eventTime,
+  eventDuration,
+  eventLocation,
+  eventLocationDeatil,
+  eventDetails,
+  eventCoverImage,
+  eventPaid,
+  eventamount,
+  } = req.body;
+
+  const user = await userModel.findById(userId);
+  
+  if (!user) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const community = user.community.find(
+    (c) => c._id.toString() === communityId
+  );
+  
+  if (!community) {
+    return res
+      .status(404)
+      .json({ error: "Community not found for the user" });
+  }
+  //console.log("user",userId)
+  //console.log("community",communityId)
+  //console.log("event",eventId)
+  const event = community.events.find(
+    (c) => c._id.toString() === eventId
+  );
+  if (!event) {
+    return res
+      .status(404)
+      .json({ error: "event not found for the user" });
+  }
+    
+    event.eventTitle = eventTitle,
+      (event.eventDate = eventDate),
+      (event.eventTime = eventTime),
+      (event.eventDuration = eventDuration),
+      (event.eventLocation = eventLocation),
+      (event.eventLocationDeatil = eventLocationDeatil),
+      (event.eventDetails = eventDetails),
+      (event.eventCoverImage=eventCoverImage),
+      (event.eventPaid=eventPaid)
+      event.eventamount=eventamount
+      // Save the updated user object
+      user.save((saveErr) => {
+        if (saveErr) {
+          console.error("Error saving user:", saveErr);
+          return res.status(500).json({ error: "Server error" });
+        }
+
+        return res.status(200).json({
+          message: "Event details updated successfully",
+          community: event,
+        });
+      });
+  });
+
+
 /* { COMMUNITY } */
 
 // GET REQUEST
