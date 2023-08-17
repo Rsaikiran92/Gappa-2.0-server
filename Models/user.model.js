@@ -15,11 +15,11 @@ const eventSchema=new mongoose.Schema({
   eventTime:{type:String,required:true},
   eventDuration:{type:String,required:true},
   eventLocation:{type:String,required:true},
-  eventLocationDeatil:{type:String,required:true},
+  eventLocationDetails:{type:String,required:true},
   eventDetails:{type:String,required:true},
   eventCoverImage:{type:String,required:true},
   eventPaid:{type:Boolean,required:true},
-  eventamount:{type:Number,required:true},
+  eventAmount:{type:Number,required:true},
 })
 
 const groupSchema = new mongoose.Schema({
