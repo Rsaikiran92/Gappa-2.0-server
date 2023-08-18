@@ -422,6 +422,41 @@ userRouter.delete("/:userId/community/:communityId", (req, res) => {
 
 //event
 
+// GET REQUEST
+userRouter.get("/:userId/:communityId/event/:eventId", (req, res) => {
+  const { userId, communityId ,eventId} = req.params;
+
+  userModel.findById(userId, (err, user) => {
+    if (err) {
+      console.error("Error finding user:", err);
+      return res.status(500).json({ error: "Server error" });
+    }
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const community = user.community.find(
+      (c) => c._id.toString() === communityId
+    );
+    if (!community) {
+      return res
+        .status(404)
+        .json({ error: "Community not found for the user" });
+    }
+    const event = community.events.find(
+      (c) => c._id.toString() === eventId
+    );
+    if (!event) {
+      return res
+        .status(404)
+        .json({ error: "event not found for the user" });
+    }
+
+    return res.status(200).json(event);
+  });
+});
+
 //post event
 userRouter.post("/:userId/event/:communityId", async (req, res) => {
   try {
@@ -488,7 +523,7 @@ userRouter.delete("/:userId/:communityId/event/:eventId", async(req, res) => {
     const community = user.community.find(
       (c) => c._id.toString() === communityId
     );
-    
+    console.log(community)
     if (!community) {
       return res
         .status(404)
@@ -498,10 +533,10 @@ userRouter.delete("/:userId/:communityId/event/:eventId", async(req, res) => {
       (c) => c._id.toString() === eventId
     );
     console.log(event)
-    if (!event) {
+    if (event<0) {
       return res
         .status(404)
-        .json({ error: "Community not found for the user" });
+        .json({ error: "event not found for the user" });
     }
     community.events.splice(event, 1);
     user.save((saveErr) => {
